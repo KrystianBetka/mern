@@ -8,7 +8,7 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.json())
 
-dbo.connectToServer(console.log);
+dbo.connectToServer();
 app.get('/products', async function (req, res) {
     const dbConnect = dbo.getDb();
 
