@@ -17,10 +17,10 @@ module.exports = {
                 return callback(err);
             }
 
-            dbConnection = db.db("warehouse");
+            dbConnection = db.db("products");
             console.log("Successfully connected to MongoDB.");
 
-            return callback();
+            return callback;
         });
     },
 
