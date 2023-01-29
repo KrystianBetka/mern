@@ -1,3 +1,4 @@
+const { query } = require("express");
 const express = require("express");
 const Routes = express.Router();
 const dbo = require("./db/conn");
@@ -13,8 +14,8 @@ Routes.route("/products").get(function(req, res) {
 
 Routes.route("/products/:id").get(function(req, res) {
     let db_connect = dbo.getDb("products");
-    let myquery = {_id: ObjectId(req.params.id)};
-    db_connect.collection("products").findOne(myquery, function(err, result) {
+    let query = {_id: ObjectId(req.params.id)};
+    db_connect.collection("products").findOne(query, function(err, result) {
         if (err) throw err;
         res.json(result);
     });
@@ -22,12 +23,12 @@ Routes.route("/products/:id").get(function(req, res) {
 
 Routes.route("/products/add").post(function(req, response){
     let db_connect = dbo.getDb("products");
-    let myobj = {
+    let obj = {
         name: req.body.name,
-        position: req.body.position,
-        level: req.body.level
+        price: req.body.price,
+        amount: req.body.amount
     };
-    db_connect.collection("products").insertOne(myobj, function(err, res){
+    db_connect.collection("products").insertOne(obj, function(err, res){
         if (err) throw err;
         response.json(res);
     });
@@ -35,15 +36,15 @@ Routes.route("/products/add").post(function(req, response){
 
 Routes.route("/update/:id").post(function(req, response){
     let db_connect = dbo.getDb("products");
-    let myquery = {_id: ObjectId(req.params.id)};
-    let newValues = {
+    let query = {_id: ObjectId(req.params.id)};
+    let updatedValues = {
         $set: {
             name: req.body.name,
-            position: req.body.position,
-            level:  req.body.level
+            price: req.body.price,
+            amount:  req.body.amount
         },
     };
-    db_connect.collection("products").updateOne(myquery, newValues, function(err, res){
+    db_connect.collection("products").updateOne(query, updatedValues, function(err, res){
         if (err) throw err;
         console.log("1 document updated successfully");
         response.json(res);
@@ -52,8 +53,8 @@ Routes.route("/update/:id").post(function(req, response){
 
 Routes.route("/:id").delete(function (req, res) {
     let db_connect = dbo.getDb("products");
-    let myquery = {_id: ObjectId(req.params.id)};
-    db_connect.collection("products").deleteOne(myquery, function(err, obj){
+    let query = {_id: ObjectId(req.params.id)};
+    db_connect.collection("products").deleteOne(query, function(err, obj){
         if (err) throw err;
         console.log("1 document deleted");
         res.json(obj);
