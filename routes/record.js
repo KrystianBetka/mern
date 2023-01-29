@@ -1,9 +1,9 @@
 const express = require("express");
-const recordRoutes = express.Router();
-const dbo = require("../db/conn");
+const Routes = express.Router();
+const dbo = require("./db/conn");
 const ObjectId = require("mongodb").ObjectId;
 
-recordRoutes.route("/products").get(function(req, res) {
+Routes.route("/products").get(function(req, res) {
     let db_connect = dbo.getDb("products");
     db_connect.collection("products").find({}).toArray(function(err, result) {
         if (err) throw err;
@@ -11,7 +11,7 @@ recordRoutes.route("/products").get(function(req, res) {
     });
 });
 
-recordRoutes.route("/products/:id").get(function(req, res) {
+Routes.route("/products/:id").get(function(req, res) {
     let db_connect = dbo.getDb("products");
     let myquery = {_id: ObjectId(req.params.id)};
     db_connect.collection("products").findOne(myquery, function(err, result) {
@@ -20,7 +20,7 @@ recordRoutes.route("/products/:id").get(function(req, res) {
     });
 });
 
-recordRoutes.route("/products/add").post(function(req, response){
+Routes.route("/products/add").post(function(req, response){
     let db_connect = dbo.getDb("products");
     let myobj = {
         name: req.body.name,
@@ -33,7 +33,7 @@ recordRoutes.route("/products/add").post(function(req, response){
     });
 });
 
-recordRoutes.route("/update/:id").post(function(req, response){
+Routes.route("/update/:id").post(function(req, response){
     let db_connect = dbo.getDb("products");
     let myquery = {_id: ObjectId(req.params.id)};
     let newValues = {
@@ -50,7 +50,7 @@ recordRoutes.route("/update/:id").post(function(req, response){
     });
 });
 
-recordRoutes.route("/:id").delete(function (req, res) {
+Routes.route("/:id").delete(function (req, res) {
     let db_connect = dbo.getDb("products");
     let myquery = {_id: ObjectId(req.params.id)};
     db_connect.collection("products").deleteOne(myquery, function(err, obj){
@@ -60,8 +60,8 @@ recordRoutes.route("/:id").delete(function (req, res) {
     });
 })
 
-module.exports = recordRoutes;
+module.exports = Routes;
 
 
 
-module.exports = recordRoutes;
+module.exports = Routes;

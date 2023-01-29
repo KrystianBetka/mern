@@ -1,29 +1,31 @@
 const { MongoClient } = require("mongodb");
-const Db = process.env.MONGO_URI;
-console.log(Db)
-const client = new MongoClient(Db, {
+
+const connectionString = "mongodb://localhost:27017";
+
+
+const client = new MongoClient(connectionString, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 });
 
-var _db;
+let dbConnection;
 
 module.exports = {
     connectToServer: function (callback) {
         client.connect(function (err, db) {
-            
-            if (db)
-            {
-                _db = db.db("products");
-                console.log("Successfully connected to MongoDB.");
+            if (err || !db) {
+                return callback(err);
             }
-            return callback(err);
+
+            dbConnection = db.db("warehouse");
+            console.log("Successfully connected to MongoDB.");
+
+            return callback();
         });
     },
 
     getDb: function () {
-        return _db;
+        return dbConnection;
     },
 };
-
 
